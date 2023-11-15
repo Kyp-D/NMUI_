@@ -1,0 +1,32 @@
+function downloadPkg(a,b)
+  echo("Downloading package.")
+  downloadFile(getMudletHomeDir() .. "/NMUI.zip", "https://github.com/Kyp-D/NMUI_/releases/latest/download/NMUI.zip")
+  tempTimer(1.5, function() echo(".") end)
+  tempTimer(2.5, function() echo(".") end)
+  tempTimer(3.5, function() echo(".") end)
+  tempTimer(5.5, function() echo(".") end)
+end
+
+function installReady(event, file)
+  if file ~= getMudletHomeDir().."/NMUI.zip" then return end
+  if not io.exists(getMudletHomeDir().."/NMUI.zip") then 
+    cecho([[<gold>To download the NarutoMUD Mudlet client, please copy and paste the following code into the command line:
+    
+lua function d(a,b)if not b:find("NMUI",1,true)then return end installPackage(b)os.remove(b)cecho("<lime_green>Package installed!\n")end registerAnonymousEventHandler("sysDownloadDone","d")downloadFile(getMudletHomeDir().."/NMUI.zip","https://github.com/Kyp-D/NMUI_/releases/latest/download/NMUI.zip")
+    
+]])
+    return
+  end
+  
+  cecho([[
+  
+<maroon>*<gold> The NarutoMUD Mudlet client has successfully been downloaded.
+ 
+]])
+  cecho("\r\n<maroon>*<gold> Installing... <gray>(this will just take a few seconds.)\r\n")
+  tempTimer(2, [[installPackage(getMudletHomeDir().."/NMUI.zip")]])
+  uninstallPackage("NM_Loader")
+end
+
+registerAnonymousEventHandler("sysConnectionEvent", "downloadPkg")
+registerAnonymousEventHandler("sysDownloadDone", "installReady")
